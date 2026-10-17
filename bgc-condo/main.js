@@ -105,7 +105,7 @@ function paintOverlay(progress) {
     c.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`
   }
   scrollCue.classList.toggle("is-hidden", progress > 0.003)
-  stageCta.classList.toggle("is-hidden", progress < 0.04)
+  stageCta.classList.toggle("is-hidden", progress < 0.16)
 }
 
 window.addEventListener("scroll", schedule, { passive: true })
