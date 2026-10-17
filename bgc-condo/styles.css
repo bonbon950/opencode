@@ -35,7 +35,7 @@ html.is-locked {
 
 body {
   margin: 0;
-  min-width: 1024px;
+  min-width: 1200px;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
@@ -78,7 +78,7 @@ button {
 .desktop-only {
   display: none;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1199px) {
   .desktop-only {
     position: fixed;
     inset: 0;
@@ -253,8 +253,8 @@ button {
 .film {
   position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%; /* not 100vw: that would include the scrollbar and shift the crop */
+  height: 100%;
   object-fit: cover;
   pointer-events: none;
   background: #000;
@@ -271,6 +271,14 @@ button {
   background:
     linear-gradient(to top, rgba(4, 5, 6, 0.72) 0%, rgba(4, 5, 6, 0) 38%),
     linear-gradient(to bottom, rgba(4, 5, 6, 0.45) 0%, rgba(4, 5, 6, 0) 20%);
+}
+
+/* Static film grain: dithers banding in the dusk sky and softens upscaling. Not animated. */
+.shade--grain {
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
 /* chapters — positioned in the lower thirds to leave the centre of the frame to the architecture */

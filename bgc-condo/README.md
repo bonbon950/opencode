@@ -5,10 +5,10 @@ Desktop/laptop-only luxury film site. Scroll position drives `video.currentTime`
 Run: `python3 -m http.server 8000` in this folder, open http://localhost:8000. (Use http, not file:// — the loader fetches the video as a blob for instant seeks; file:// falls back to a plain `src`.)
 
 ## Replace the video
-The bundled film is the supplied construction-to-completion clip (10 s, 24 fps, re-encoded at 1280×720 with every frame a keyframe). To swap it, drop your file at `assets/bgc-condo.mp4` (path is on the `<video>` in `index.html`). 
+The bundled film is the supplied construction-to-completion clip (10 s, 24 fps, 640×360 source re-encoded at 1280×720 with every frame a keyframe, ~11 MB). To swap it, drop your file at `assets/bgc-condo.mp4` (path is `data-src` on the `<video>` in `index.html`). 
 For smooth scrubbing in both directions, re-encode with a keyframe on every frame:
 
-    ffmpeg -i source.mp4 -vf scale=1920:-2 -c:v libx264 -preset slow -crf 23 -g 1 -pix_fmt yuv420p -movflags +faststart -an assets/bgc-condo.mp4
+    ffmpeg -i source.mp4 -vf scale=1280:-2:flags=lanczos -c:v libx264 -preset slow -crf 18 -g 1 -bf 0 -pix_fmt yuv420p -movflags +faststart -an assets/bgc-condo.mp4
 
 Keep it to roughly 40 MB or less (the whole file is buffered in memory before the site opens).
 

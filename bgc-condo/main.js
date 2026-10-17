@@ -10,7 +10,7 @@
 // Increase for a slower, longer film; decrease for a faster one.
 const SCROLL_MULTIPLIER = 6;
 
-// Video path is set in index.html (<video src="assets/bgc-condo.mp4">).
+// Video path is set in index.html (<video data-src="assets/bgc-condo.mp4">).
 const MIN_LOADER_MS = 1400; // keep the loader up long enough to read
 const MAX_LOADER_MS = 20000; // never trap the user if the network is slow
 const FRAME_RATE_GUESS = 24; // only used to skip sub-frame seeks
@@ -41,6 +41,7 @@ let timelineTop = 0 // document-space Y where the sticky stage starts pinning
 let scrubLength = 1 // px of scrolling that maps to the full video
 let lastApplied = -1 // last currentTime we wrote
 let lastProgress = -1
+let lastCovered = false
 let frameQueued = false
 
 // ───────────── geometry (measured on resize only, never per frame) ─────────────
@@ -58,12 +59,16 @@ function schedule() {
 
 function render() {
   frameQueued = false
-  const progress = Math.min(1, Math.max(0, (window.scrollY - timelineTop) / scrubLength))
+  const raw = (window.scrollY - timelineTop) / scrubLength
+  const progress = Math.min(1, Math.max(0, raw))
 
   seek(progress)
-  if (progress !== lastProgress) {
+  // raw > 1 means the contact section is sliding over the held final frame.
+  const covered = raw > 1.02
+  if (progress !== lastProgress || covered !== lastCovered) {
     lastProgress = progress
-    paintOverlay(progress)
+    lastCovered = covered
+    paintOverlay(progress, covered)
   }
 }
 
@@ -88,7 +93,7 @@ video.addEventListener("seeked", schedule)
 video.addEventListener("play", () => video.pause())
 
 // ───────────── overlay text driven by progress ─────────────
-function paintOverlay(progress) {
+function paintOverlay(progress, covered) {
   for (const c of chapters) {
     const fade = 0.04
     const a = Math.min(1, Math.max(0, (progress - c.in) / fade))
@@ -105,7 +110,7 @@ function paintOverlay(progress) {
     c.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`
   }
   scrollCue.classList.toggle("is-hidden", progress > 0.003)
-  stageCta.classList.toggle("is-hidden", progress < 0.16)
+  stageCta.classList.toggle("is-hidden", progress < 0.16 || covered)
 }
 
 window.addEventListener("scroll", schedule, { passive: true })
@@ -117,8 +122,7 @@ window.addEventListener("resize", () => {
 // ───────────── loading ─────────────
 async function load() {
   const started = performance.now()
-  const src = video.getAttribute("src")
-  video.removeAttribute("src")
+  const src = video.dataset.src
 
   const setProgress = (p) => {
     loaderBar.style.transform = `scaleX(${p})`
@@ -183,21 +187,29 @@ setTimeout(() => {
 
 load().catch((err) => {
   console.error("Video failed to load:", err)
-  loaderPct.textContent = " — video unavailable"
+  loaderPct.textContent = " — VIDEO UNAVAILABLE"
+  // Don't trap the visitor behind the loader: show the page (text + contact still work).
+  setTimeout(() => {
+    document.body.classList.remove("is-loading")
+    loader.classList.add("is-done")
+  }, 2500)
 })
 
 // ───────────── contact panel ─────────────
 const panel = document.getElementById("contactPanel")
 let opener = null
+const background = [document.querySelector(".nav"), document.querySelector("main")] // inert while open: keeps Tab inside the panel
 
 function openContact(from) {
   opener = from
   panel.hidden = false
+  background.forEach((el) => (el.inert = true))
   document.documentElement.classList.add("is-locked")
   panel.querySelector(".contact__options a").focus()
 }
 function closeContact() {
   panel.hidden = true
+  background.forEach((el) => (el.inert = false))
   document.documentElement.classList.remove("is-locked")
   opener?.focus()
 }

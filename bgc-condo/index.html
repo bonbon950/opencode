@@ -6,6 +6,7 @@
     <title>BGC Condo — Megaworld</title>
     <meta name="description" content="BGC Condo by Megaworld. A scroll-driven architectural film. Presented by Saimon Sarmiento, Senior Property Specialist." />
     <meta name="theme-color" content="#08090a" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%2308090a%27/%3E%3Cpath d=%27M9 8h8a4 4 0 010 8H9zm0 8h9a4 4 0 010 8H9z%27 fill=%27none%27 stroke=%27%23c9b48a%27 stroke-width=%271.6%27/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="is-loading">
@@ -42,13 +43,13 @@
       <section class="timeline" id="timeline">
         <div class="stage" id="stage">
           <!--
-            VIDEO SOURCE — replace the file at assets/bgc-condo.mp4 (or change the path below).
+            VIDEO SOURCE — replace the file at assets/bgc-condo.mp4 (or change data-src below; main.js loads it so the file is fetched exactly once).
             Encode with a keyframe on every frame for the smoothest scrubbing (see README.md).
           -->
           <video
             id="film"
             class="film"
-            src="assets/bgc-condo.mp4"
+            data-src="assets/bgc-condo.mp4"
             muted
             playsinline
             preload="auto"
@@ -61,6 +62,7 @@
 
           <div class="shade shade--vignette"></div>
           <div class="shade shade--base"></div>
+          <div class="shade shade--grain"></div>
 
           <!-- Story chapters: faded in/out by scroll progress (data-in / data-out are 0–1). -->
           <div class="chapter chapter--title" data-in="0" data-out="0.2" data-lift="-24">
