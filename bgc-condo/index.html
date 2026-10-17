@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BGC Condo — Megaworld</title>
+    <meta name="description" content="BGC Condo by Megaworld. A scroll-driven architectural film. Presented by Saimon Sarmiento, Senior Property Specialist." />
+    <meta name="theme-color" content="#08090a" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="is-loading">
+    <!-- Desktop / laptop only. Shown by CSS below 1024px wide. -->
+    <div class="desktop-only" role="alert">
+      <p>This experience is designed for desktop and laptop screens.</p>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loader" id="loader" aria-live="polite">
+      <div class="loader__inner">
+        <p class="loader__eyebrow">MEGAWORLD</p>
+        <h1 class="loader__title">BGC CONDO</h1>
+        <span class="loader__line"><i id="loaderBar"></i></span>
+        <p class="loader__status">LOADING<span id="loaderPct">…</span></p>
+      </div>
+    </div>
+
+    <!-- NAV -->
+    <header class="nav">
+      <a class="nav__brand" href="#top" aria-label="Back to start">
+        <span>MEGAWORLD</span>
+        <span>BGC CONDO</span>
+      </a>
+      <button class="nav__contact" type="button" data-open-contact>CONTACT</button>
+    </header>
+
+    <main id="top">
+      <!--
+        CINEMATIC TIMELINE
+        Tall section; the stage is sticky. Scroll distance through this section
+        is mapped to video.currentTime. Length is set by SCROLL_MULTIPLIER in main.js.
+      -->
+      <section class="timeline" id="timeline">
+        <div class="stage" id="stage">
+          <!--
+            VIDEO SOURCE — replace the file at assets/bgc-condo.mp4 (or change the path below).
+            Encode with a keyframe on every frame for the smoothest scrubbing (see README.md).
+          -->
+          <video
+            id="film"
+            class="film"
+            src="assets/bgc-condo.mp4"
+            muted
+            playsinline
+            preload="auto"
+            disablepictureinpicture
+            disableremoteplayback
+            controlslist="nodownload nofullscreen noremoteplayback"
+            tabindex="-1"
+            aria-hidden="true"
+          ></video>
+
+          <div class="shade shade--vignette"></div>
+          <div class="shade shade--base"></div>
+
+          <!-- Story chapters: faded in/out by scroll progress (data-in / data-out are 0–1). -->
+          <div class="chapter chapter--title" data-in="0" data-out="0.2" data-lift="-24">
+            <p class="eyebrow">MEGAWORLD</p>
+            <h2 class="display">BGC CONDO</h2>
+            <span class="rule"></span>
+            <p class="meta">Bonifacio Global City</p>
+          </div>
+
+          <div class="chapter chapter--agent-hero" data-in="0" data-out="0.14" data-lift="-12">
+            <p class="agent-line"><strong>SAIMON SARMIENTO</strong> · Senior Property Specialist</p>
+            <p class="agent-line agent-line--dim">0928 153 5951</p>
+          </div>
+
+          <div class="chapter chapter--mega" data-in="0.28" data-out="0.5" data-lift="24">
+            <p class="eyebrow">DEVELOPED BY</p>
+            <h2 class="display display--md">MEGAWORLD</h2>
+            <span class="rule"></span>
+          </div>
+
+          <div class="chapter chapter--agent" data-in="0.6" data-out="0.9" data-lift="24">
+            <p class="eyebrow">YOUR PROPERTY SPECIALIST</p>
+            <h2 class="display display--md">SAIMON SARMIENTO</h2>
+            <span class="rule"></span>
+            <p class="meta">Senior Property Specialist</p>
+            <p class="meta meta--dim">0928 153 5951</p>
+          </div>
+
+          <!-- Scroll indicator -->
+          <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+            <span>SCROLL TO EXPLORE</span>
+            <i></i>
+          </div>
+
+          <!-- Contact CTA -->
+          <button class="cta" id="stageCta" type="button" data-open-contact>
+            <span class="cta__label">CONTACT SAIMON</span>
+            <span class="cta__line"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- FINAL CONTACT — slides up over the held final frame -->
+      <section class="finale" id="contact">
+        <div class="finale__inner">
+          <p class="eyebrow">BGC CONDO · MEGAWORLD</p>
+          <h2 class="finale__headline">Ready to find your next<br />property in BGC?</h2>
+          <span class="rule"></span>
+          <div class="finale__agent">
+            <p class="finale__name">SAIMON SARMIENTO</p>
+            <p class="meta">Senior Property Specialist</p>
+            <p class="meta meta--dim">MEGAWORLD</p>
+          </div>
+          <div class="finale__details">
+            <a href="tel:+639281535951">0928 153 5951</a>
+            <a href="mailto:Ssarmiento.megaworld@gmail.com">Ssarmiento.megaworld@gmail.com</a>
+          </div>
+          <button class="cta cta--static" type="button" data-open-contact>
+            <span class="cta__label">CONTACT SAIMON</span>
+            <span class="cta__line"></span>
+          </button>
+        </div>
+        <footer class="finale__foot">
+          <span>© Megaworld · BGC Condo</span>
+          <button type="button" id="backToTop">BACK TO START ↑</button>
+        </footer>
+      </section>
+    </main>
+
+    <!-- CONTACT PANEL -->
+    <div class="contact" id="contactPanel" hidden>
+      <div class="contact__backdrop" data-close-contact></div>
+      <div class="contact__card" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+        <button class="contact__close" type="button" data-close-contact aria-label="Close">CLOSE ✕</button>
+        <p class="eyebrow">MEGAWORLD · BGC CONDO</p>
+        <h2 class="contact__title" id="contactTitle">Contact Saimon</h2>
+        <p class="meta">Senior Property Specialist</p>
+        <span class="rule"></span>
+        <ul class="contact__options">
+          <li><a href="tel:+639281535951"><span>CALL</span><em>+63 928 153 5951</em></a></li>
+          <li><a href="https://wa.me/639281535951" target="_blank" rel="noopener"><span>WHATSAPP</span><em>+63 928 153 5951</em></a></li>
+          <li><a href="viber://chat?number=%2B639281535951"><span>VIBER</span><em>+63 928 153 5951</em></a></li>
+          <li><a href="mailto:Ssarmiento.megaworld@gmail.com"><span>EMAIL</span><em>Ssarmiento.megaworld@gmail.com</em></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
